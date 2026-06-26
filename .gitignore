@@ -10,3 +10,7 @@ frontend/build/
 # Environnement
 *.env
 appsettings.Development.json
+
+# Dossiers de build
+backend/build-check/
+backend/build-check-codex/
