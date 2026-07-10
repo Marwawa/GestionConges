@@ -35,14 +35,14 @@ const MainLayout: React.FC = () => {
 
   const menuItems = [
     { text: t('dashboard'),  icon: <DashboardIcon />, path: '/app/dashboard' },
-    ...(user?.role === 'ChefDeService' ? [] : [
+    ...(user?.role === 'PrésidenteGreffe' ? [] : [
       { text: t('mesConges'), icon: <EventNoteIcon />, path: '/app/mes-conges' },
     ]),
     { text: t('calendrier'), icon: <CalendarIcon />,  path: '/app/calendrier' },
     { text: t('profil'),     icon: <PersonIcon />,    path: '/app/profil' },
   ];
 
-  if (user?.role === 'Admin' || user?.role === 'ChefDeService') {
+  if (user?.role === 'Admin' || user?.role === 'PrésidenteGreffe') {
     menuItems.splice(2, 0, {
       text: t('validationConges'), icon: <CheckCircleIcon />, path: '/app/validation-conges',
     });
@@ -118,9 +118,9 @@ const drawer = (
           <Notifications />
           <Button color="inherit" onClick={handleMenuOpen}>
             <Avatar sx={{ width: 34, height: 34, mr: isArabic ? 0 : 1, ml: isArabic ? 1 : 0, bgcolor: 'primary.main' }}>
-              {user?.prenom?.[0]}{user?.nom?.[0]}
+              {isArabic ? `${user?.prenomAr?.[0]}${user?.nomAr?.[0]}` : `${user?.prenom?.[0]}${user?.nom?.[0]}`}
             </Avatar>
-            {user?.prenom} {user?.nom}
+            {isArabic ? `${user?.prenomAr} ${user?.nomAr}` : `${user?.prenom} ${user?.nom}`}
           </Button>
           <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleMenuClose}>
             <MenuItem onClick={() => { handleMenuClose(); navigate('/app/profil'); }}>
@@ -142,7 +142,7 @@ const drawer = (
           {drawer}
         </Drawer>
         <Drawer variant="permanent" open
-          anchor={isArabic ? 'right' : 'left'}
+          anchor="left"
           sx={{ display: { xs: 'none', sm: 'block' }, '& .MuiDrawer-paper': { width: drawerWidth, border: 0, boxShadow: '0 20px 60px rgba(15, 23, 42, 0.08)' } }}>
           {drawer}
         </Drawer>

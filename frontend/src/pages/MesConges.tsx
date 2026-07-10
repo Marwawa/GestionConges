@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+﻿import React, { useEffect, useState } from 'react';
 import {
   Box, Button, Typography, Alert, CircularProgress,
   Table, TableBody, TableCell, TableContainer, TableHead,
@@ -32,10 +32,10 @@ interface Conge {
 
 const statutColors: Record<string, 'warning' | 'success' | 'error' | 'default'> = {
   'En attente': 'warning',
-  'Approuvé': 'success',
-  'Rejeté': 'error',
-  'Annulé': 'default',
-  'Changement demandé': 'warning',
+  'ApprouvÃ©': 'success',
+  'RejetÃ©': 'error',
+  'AnnulÃ©': 'default',
+  'Changement demandÃ©': 'warning',
 };
 
 const MesConges: React.FC = () => {
@@ -50,10 +50,10 @@ const MesConges: React.FC = () => {
   const getStatutLabel = (statut: string) => {
     switch (statut) {
       case 'En attente': return t('statutEnAttente');
-      case 'Approuvé': return t('statutApprouve');
-      case 'Rejeté': return t('statutRejete');
-      case 'Annulé': return t('statutAnnule');
-      case 'Changement demandé': return t('statutChangementDemande');
+      case 'ApprouvÃ©': return t('statutApprouve');
+      case 'RejetÃ©': return t('statutRejete');
+      case 'AnnulÃ©': return t('statutAnnule');
+      case 'Changement demandÃ©': return t('statutChangementDemande');
       default: return statut;
     }
   };
@@ -132,7 +132,7 @@ const MesConges: React.FC = () => {
         </Box>
       ) : conges.length === 0 ? (
         <Paper sx={{ textAlign: 'center', py: 8, color: 'text.secondary', borderRadius: 3 }}>
-          <Typography sx={{ fontSize: 48 }}>📋</Typography>
+          <Typography sx={{ fontSize: 48 }}>ðŸ“‹</Typography>
           <Typography variant="h6" sx={{ mt: 1 }}>{t('aucuneDemandeDeConge')}</Typography>
           <Typography variant="body2">{t('cliquezPour')}</Typography>
         </Paper>
@@ -158,14 +158,14 @@ const MesConges: React.FC = () => {
                   <TableCell>{new Date(c.dateDebut).toLocaleDateString(locale)}</TableCell>
                   <TableCell>{new Date(c.dateFin).toLocaleDateString(locale)}</TableCell>
                   <TableCell>{c.nombreJours} {t('jour')}</TableCell>
-                  <TableCell sx={{ maxWidth: 200, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                  <TableCell sx={{ maxWidth: 150, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                     {c.motif || '-'}
                   </TableCell>
                   <TableCell>
                     <Chip label={getStatutLabel(c.statut)} color={statutColors[c.statut] || 'default'} size="small" />
                   </TableCell>
                   <TableCell>
-                    {c.statut === 'Changement demandé' && c.dateDebutProposee && c.dateFinProposee ? (
+                    {c.statut === 'Changement demandÃ©' && c.dateDebutProposee && c.dateFinProposee ? (
                       <Box>
                         <Typography variant="body2">
                           {new Date(c.dateDebutProposee).toLocaleDateString(locale)} - {new Date(c.dateFinProposee).toLocaleDateString(locale)}
@@ -177,26 +177,39 @@ const MesConges: React.FC = () => {
                     ) : '-'}
                   </TableCell>
                   <TableCell>
-                    {c.statut === 'En attente' && (
-                      <Button size="small" color="error" onClick={() => handleAnnuler(c.id)}>
-                        {t('annuler')}
-                      </Button>
-                    )}
-                    {c.statut === 'Approuvé' && (
-                      <Button size="small" color="error" startIcon={<PictureAsPdfIcon />} onClick={() => generateAttestationCongePDF(c, user!)}>
-                        Attestation
-                      </Button>
-                    )}
-                    {c.statut === 'Changement demandé' && (
-                      <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap' }}>
-                        <Button size="small" variant="contained" color="success" onClick={() => handleReponseProposition(c.id, true)}>
-                          {t('accepterProposition')}
+                    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 0.5 }}>
+                      {/* Annuler */}
+                      {c.statut === 'En attente' && (
+                        <Button size="small" color="error" onClick={() => handleAnnuler(c.id)}>
+                          {t('annuler')}
                         </Button>
-                        <Button size="small" variant="outlined" color="error" onClick={() => handleReponseProposition(c.id, false)}>
-                          {t('refuserProposition')}
+                      )}
+
+                      {/* Attestation PDF */}
+                      {c.statut === 'ApprouvÃ©' && (
+                        <Button
+                          size="small"
+                          color="error"
+                          startIcon={<PictureAsPdfIcon />}
+                          onClick={() => generateAttestationCongePDF(c, user!)}
+                        >
+                          Attestation
                         </Button>
-                      </Box>
-                    )}
+                      )}
+
+
+                      {/* RÃ©ponse proposition */}
+                      {c.statut === 'Changement demandÃ©' && (
+                        <Box sx={{ display: 'flex', gap: 0.5, flexWrap: 'wrap' }}>
+                          <Button size="small" variant="contained" color="success" onClick={() => handleReponseProposition(c.id, true)}>
+                            {t('accepterProposition')}
+                          </Button>
+                          <Button size="small" variant="outlined" color="error" onClick={() => handleReponseProposition(c.id, false)}>
+                            {t('refuserProposition')}
+                          </Button>
+                        </Box>
+                      )}
+                    </Box>
                   </TableCell>
                 </TableRow>
               ))}

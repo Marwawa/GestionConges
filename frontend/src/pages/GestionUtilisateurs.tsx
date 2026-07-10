@@ -20,13 +20,16 @@ interface Utilisateur {
   prenom: string;
   email: string;
   motDePasse: string;
+  serviceAr?: string;
   role: string;
   service: string;
+  nomAr?: string;
+  prenomAr?: string;
   dateCreation: string;
   estActif: boolean;
 }
 
-const roles = ['Admin', 'ChefDeService', 'Fonctionnaire'];
+const roles = ['Admin', 'PrésidenteGreffe', 'Fonctionnaire'];
 const services = ['Informatique', 'Comptabilité', 'RH', 'Direction', 'Technique', 'Commercial'];
 
 const emptyForm: Utilisateur = {
@@ -190,7 +193,7 @@ const GestionUtilisateurs: React.FC = () => {
                   <TableCell>{u.prenom} {u.nom}</TableCell>
                   <TableCell>{u.email}</TableCell>
                   <TableCell>
-                    <Chip label={u.role} size="small" color={u.role === 'Admin' ? 'error' : u.role === 'ChefDeService' ? 'warning' : 'default'} />
+                    <Chip label={u.role} size="small" color={u.role === 'Admin' ? 'error' : u.role === 'PrésidenteGreffe' ? 'warning' : 'default'} />
                   </TableCell>
                   <TableCell>{u.service}</TableCell>
                   <TableCell>
@@ -229,6 +232,26 @@ const GestionUtilisateurs: React.FC = () => {
               <TextField label={t('prenom')} name="prenom" value={form.prenom} onChange={handleChange} fullWidth required />
               <TextField label={t('nom')} name="nom" value={form.nom} onChange={handleChange} fullWidth required />
             </Box>
+            <Box sx={{ display: 'flex', gap: 2, flexDirection: { xs: 'column', sm: 'row' } }}>
+  <TextField
+  label="الاسم (بالعربية)"
+  name="prenomAr"
+  value={form.prenomAr || ''}
+  onChange={handleChange}
+  fullWidth
+  dir="rtl"
+  slotProps={{ htmlInput: { style: { fontFamily: 'inherit', textAlign: 'right' } } }}
+/>
+<TextField
+  label="اللقب (بالعربية)"
+  name="nomAr"
+  value={form.nomAr || ''}
+  onChange={handleChange}
+  fullWidth
+  dir="rtl"
+  slotProps={{ htmlInput: { style: { fontFamily: 'inherit', textAlign: 'right' } } }}
+/>
+</Box>
             <TextField label={t('email')} name="email" value={form.email} onChange={handleChange} fullWidth required type="email" />
             {!isEdit && (
               <TextField label={t('motDePasse')} name="motDePasse" value={form.motDePasse} onChange={handleChange} fullWidth required type="password" />

@@ -70,7 +70,7 @@ const Calendrier: React.FC = () => {
     try {
       setLoading(true);
       let res;
-      if (user?.role === 'Admin' || user?.role === 'ChefDeService') {
+      if (user?.role === 'Admin' || user?.role === 'PrésidenteGreffe') {
         res = await congeService.getTousLesConges();
       } else {
         res = await congeService.getMesConges(user!.id);
@@ -78,9 +78,9 @@ const Calendrier: React.FC = () => {
 
       const congeEvents = res.data.map((c: Conge) => ({
         id: `conge-${c.id}`,
-        title: user?.role === 'Admin' || user?.role === 'ChefDeService'
-          ? `${c.utilisateur?.prenom} ${c.utilisateur?.nom} - ${c.typeConge}`
-          : c.typeConge,
+        title: user?.role === 'Admin' || user?.role === 'PrésidenteGreffe'
+          ? `${c.utilisateur?.prenom} ${c.utilisateur?.nom} - ${t(c.typeConge, { defaultValue: c.typeConge })}`
+          : t(c.typeConge, { defaultValue: c.typeConge }),
         start: c.dateDebut,
         end: c.dateFin,
         backgroundColor: statutColors[c.statut] || '#6b7280',
@@ -131,18 +131,23 @@ const Calendrier: React.FC = () => {
       {/* Légende */}
       <Box sx={{ display: 'flex', gap: 1.5, mb: 2, flexWrap: 'wrap' }}>
         <Chip
-          label="Jour férié"
+          label={t('jourFerie')}
           size="small"
           sx={{ backgroundColor: '#c1272d', color: 'white', fontWeight: 'bold' }}
         />
-        {Object.entries(statutColors).map(([statut, color]) => (
-          <Chip
-            key={statut}
-            label={statut}
-            size="small"
-            sx={{ backgroundColor: color, color: 'white', fontWeight: 'bold' }}
-          />
-        ))}
+        {[
+  { key: 'statutAnnule', color: '#6b7280' },
+  { key: 'statutRejete', color: '#ef4444' },
+  { key: 'statutApprouve', color: '#10b981' },
+  { key: 'statutEnAttente', color: '#f59e0b' },
+].map(({ key, color }) => (
+  <Chip
+    key={key}
+    label={t(key)}
+    size="small"
+    sx={{ backgroundColor: color, color: 'white', fontWeight: 'bold' }}
+  />
+))}
       </Box>
 
       {error && <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>}
@@ -166,11 +171,11 @@ const Calendrier: React.FC = () => {
               right: 'dayGridMonth,dayGridWeek,multiMonthYear',
             }}
             buttonText={{
-              today: "Aujourd'hui",
-              month: 'Mois',
-              week: 'Semaine',
-              year: 'Année',
-            }}
+  today: t('aujourdhui'),
+  month: t('mois'),
+  week: t('semaine'),
+  year: t('annee'),
+}}
             multiMonthMaxColumns={3}
             height="auto"
           />

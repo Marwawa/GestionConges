@@ -42,6 +42,11 @@ namespace backend.Controllers
             _soldeCongeService = soldeCongeService;
         }
 
+        private static bool IsStatutApprouve(string statut)
+        {
+            return statut == "Approuvé" || statut == "ApprouvÃ©";
+        }
+
         // GET: api/conges
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Conge>>> GetAll()
@@ -147,6 +152,12 @@ namespace backend.Controllers
             conge.Statut = dto.Statut;
             conge.Commentaire = dto.Commentaire;
             conge.DateTraitement = DateTime.Now;
+            if (IsStatutApprouve(dto.Statut))
+            {
+                conge.NombreJours = JoursFeriesMarocService.CalculerJoursOuvrables(conge.DateDebut, conge.DateFin);
+                if (conge.NombreJours <= 0)
+                    return BadRequest(new { message = "La période choisie ne contient aucun jour ouvrable." });
+            }
             await _context.SaveChangesAsync();
             await _soldeCongeService.RecalculerSoldesAutourCongeAsync(conge);
             return NoContent();
@@ -192,6 +203,8 @@ namespace backend.Controllers
                 conge.DateDebut = conge.DateDebutProposee.Value;
                 conge.DateFin = conge.DateFinProposee.Value;
                 conge.NombreJours = JoursFeriesMarocService.CalculerJoursOuvrables(conge.DateDebut, conge.DateFin);
+                if (conge.NombreJours <= 0)
+                    return BadRequest(new { message = "La période proposée ne contient aucun jour ouvrable." });
                 conge.Statut = "Approuvé";
             }
             else

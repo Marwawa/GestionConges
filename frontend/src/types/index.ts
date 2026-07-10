@@ -2,9 +2,11 @@ export interface Utilisateur {
   id: number;
   nom: string;
   prenom: string;
+  nomAr?: string;
+  prenomAr?: string;
   email: string;
   motDePasse?: string;
-  role: 'Admin' | 'ChefDeService' | 'Fonctionnaire';
+  role: 'Admin' | 'PrésidenteGreffe' | 'Fonctionnaire';
   service: string;
   dateCreation: string;
   estActif: boolean;

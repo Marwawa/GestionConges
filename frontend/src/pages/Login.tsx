@@ -22,7 +22,7 @@ const Login: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const { login } = useAuth();
   const navigate = useNavigate();
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -73,20 +73,17 @@ const Login: React.FC = () => {
             boxShadow: '0 8px 40px rgba(15, 23, 42, 0.12)',
           }}
         >
-          {/* ── En-tête avec logo ── */}
+          {/* ── En-tête avec logo + sélecteur de langue ── */}
           <Box
             sx={{
               display: 'flex',
               alignItems: 'center',
-              justifyContent: 'center',
-              gap: 1.5,
+              justifyContent: 'space-between',
               pb: 2,
               mb: 2,
               borderBottom: '1px solid #f1f5f9',
             }}
           >
-           
-
             {/* Logo */}
             <Box
               component="img"
@@ -94,6 +91,26 @@ const Login: React.FC = () => {
               alt="Royaume du Maroc"
               sx={{ height: 56, objectFit: 'contain' }}
             />
+
+            {/* Sélecteur de langue */}
+            <Box sx={{ display: 'flex', gap: 0.5 }}>
+              <Button
+                size="small"
+                variant={i18n.language === 'fr' ? 'contained' : 'outlined'}
+                onClick={() => i18n.changeLanguage('fr')}
+                sx={{ minWidth: 44, fontSize: 12, fontWeight: 700 }}
+              >
+                FR
+              </Button>
+              <Button
+                size="small"
+                variant={i18n.language === 'ar' ? 'contained' : 'outlined'}
+                onClick={() => i18n.changeLanguage('ar')}
+                sx={{ minWidth: 44, fontSize: 12, fontWeight: 700 }}
+              >
+                عربي
+              </Button>
+            </Box>
           </Box>
 
           {/* ── Titre ── */}

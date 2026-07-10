@@ -5,6 +5,10 @@ public class Utilisateur
     public int Id { get; set; }
     public string Nom { get; set; } = string.Empty;
     public string Prenom { get; set; } = string.Empty;
+    public string? NomAr { get; set; }= string.Empty;
+    public string? ServiceAr { get; set; }
+public string? PrenomAr { get; set; }= string.Empty;
+
     public string Email { get; set; } = string.Empty;
     public string MotDePasse { get; set; } = string.Empty;
     public string Role { get; set; } = string.Empty; 

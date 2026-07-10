@@ -10,12 +10,15 @@ import { useTranslation } from 'react-i18next';
 
 const Profil: React.FC = () => {
   const { user } = useAuth();
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const isArabic = i18n.language === 'ar';
   const [form, setForm] = useState({
-    nom: user?.nom || '',
-    prenom: user?.prenom || '',
-    email: user?.email || '',
-  });
+  nom: user?.nom || '',
+  prenom: user?.prenom || '',
+  nomAr: user?.nomAr || '',
+  prenomAr: user?.prenomAr || '',
+  email: user?.email || '',
+});
   const [passwords, setPasswords] = useState({
     ancien: '',
     nouveau: '',
@@ -91,13 +94,13 @@ const Profil: React.FC = () => {
 
       <Paper sx={{ p: 3, mb: 3, display: 'flex', alignItems: 'center', gap: 3, borderRadius: 3, boxShadow: '0 14px 40px rgba(15, 23, 42, 0.08)' }}>
         <Avatar sx={{ width: 80, height: 80, bgcolor: 'primary.main', fontSize: 32 }}>
-          {user?.prenom?.[0]}{user?.nom?.[0]}
+          {isArabic ? `${user?.prenomAr?.[0]}${user?.nomAr?.[0]}` : `${user?.prenom?.[0]}${user?.nom?.[0]}`}
         </Avatar>
         <Box>
-          <Typography variant="h6">{user?.prenom} {user?.nom}</Typography>
+          <Typography variant="h6">{isArabic ? `${user?.prenomAr} ${user?.nomAr}` : `${user?.prenom} ${user?.nom}`}</Typography>
           <Typography color="text.secondary">{user?.email}</Typography>
           <Typography variant="body2" color="primary" sx={{ mt: 0.5 }}>
-            {user?.role} - {user?.service}
+            {t(user?.role ?? '')} - {user?.service}
           </Typography>
         </Box>
       </Paper>
@@ -112,10 +115,10 @@ const Profil: React.FC = () => {
             {errorInfo && <Alert severity="error" sx={{ mb: 2 }}>{errorInfo}</Alert>}
 
             <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-              <TextField label={t('prenom')} name="prenom" value={form.prenom} onChange={handleChangeInfo} fullWidth />
-              <TextField label={t('nom')} name="nom" value={form.nom} onChange={handleChangeInfo} fullWidth />
+              <TextField label={t('prenom')} name="prenom" value={isArabic ? form.prenomAr : form.prenom} onChange={handleChangeInfo} fullWidth />
+              <TextField label={t('nom')} name="nom" value={isArabic ? form.nomAr : form.nom} onChange={handleChangeInfo} fullWidth />
               <TextField label={t('email')} name="email" value={form.email} onChange={handleChangeInfo} fullWidth type="email" />
-              <TextField label={t('role')} value={user?.role || ''} fullWidth disabled />
+              <TextField label={t('role')} value={t(user?.role ?? '')} fullWidth disabled />
               <TextField label={t('service')} value={user?.service || ''} fullWidth disabled />
               <Button variant="contained" onClick={handleSaveInfo} disabled={loadingInfo} startIcon={loadingInfo ? <CircularProgress size={16} /> : <PersonIcon />}>
                 {loadingInfo ? t('enregistrement') : t('enregistrer')}

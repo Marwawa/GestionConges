@@ -76,9 +76,12 @@ namespace backend.Controllers
                     utilisateur.Id,
                     utilisateur.Nom,
                     utilisateur.Prenom,
+                    utilisateur.NomAr,
+                    utilisateur.PrenomAr,
                     utilisateur.Email,
                     utilisateur.Role,
-                    utilisateur.Service
+                    utilisateur.Service,
+utilisateur.ServiceAr
                 }
             });
         }

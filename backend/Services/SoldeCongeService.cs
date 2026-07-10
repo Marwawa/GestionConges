@@ -1,4 +1,4 @@
-using backend.Data;
+﻿using backend.Data;
 using backend.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -80,7 +80,7 @@ public class SoldeCongeService
                 .Where(c =>
                     c.UtilisateurId == utilisateurId &&
                     c.TypeConge == solde.TypeConge &&
-                    c.Statut == "Approuvé" &&
+                    (c.Statut == "Approuvé" || c.Statut == "ApprouvÃ©") &&
                     c.DateDebut.Year == annee)
                 .SumAsync(c => c.NombreJours);
         }
