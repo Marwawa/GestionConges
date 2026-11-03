@@ -1,7 +1,7 @@
 # Plateforme de Gestion des Congés
 
 ## 🚀 Technologies
-- Backend : .NET 8 + Entity Framework + SQL Server
+- Backend : .NET 10 + Entity Framework + SQL Server
 - Frontend : React + TypeScript + Material UI
 
 ## ⚙️ Installation
